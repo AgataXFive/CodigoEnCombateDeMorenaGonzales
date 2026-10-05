@@ -1,4 +1,4 @@
-using Aplicacion.Dominio;
+using Persistencia.Entidades;
 
 namespace Tests;
 

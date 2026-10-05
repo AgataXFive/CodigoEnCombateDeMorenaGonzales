@@ -1,4 +1,4 @@
-namespace Aplicacion.Dominio;
+namespace Persistencia.Entidades;
 
 public class Batalla
 {
@@ -17,6 +17,22 @@ public class Batalla
     public Personaje DeterminarGanador()
     {
         return Combatiente1.Poder >= Combatiente2.Poder
+            ? Combatiente1
+            : Combatiente2;
+    }
+
+    public Personaje? DeterminarGanadorPorVida()
+    {
+        if (Combatiente1.Derrotado && Combatiente2.Derrotado)
+            return null;
+
+        if (Combatiente1.Derrotado)
+            return Combatiente2;
+
+        if (Combatiente2.Derrotado)
+            return Combatiente1;
+
+        return Combatiente1.Vida >= Combatiente2.Vida
             ? Combatiente1
             : Combatiente2;
     }

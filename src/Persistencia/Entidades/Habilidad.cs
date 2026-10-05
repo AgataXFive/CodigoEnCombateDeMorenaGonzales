@@ -1,4 +1,4 @@
-namespace Aplicacion.Dominio;
+namespace Persistencia.Entidades;
 
 public class Habilidad
 {
