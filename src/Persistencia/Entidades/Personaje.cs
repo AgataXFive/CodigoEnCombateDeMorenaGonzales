@@ -57,6 +57,29 @@ public class Personaje
             throw new InvalidOperationException($"{Nombre} está derrotado y no puede defenderse.");
     }
 
+    public void CambiarNombre(string nombre)
+    {
+        if (string.IsNullOrWhiteSpace(nombre))
+            throw new ArgumentException("El nombre es obligatorio.", nameof(nombre));
+
+        Nombre = nombre.Trim();
+    }
+
+    public virtual void UsarHabilidad(Personaje objetivo)
+    {
+        ValidarAccion(objetivo);
+        objetivo.RecibirDanio(Math.Max(1, Ataque + Poder - objetivo.Defensa));
+    }
+
+    protected void ValidarAccion(Personaje objetivo)
+    {
+        ArgumentNullException.ThrowIfNull(objetivo);
+        if (Derrotado)
+            throw new InvalidOperationException($"{Nombre} está derrotado y no puede actuar.");
+        if (objetivo.Derrotado)
+            throw new InvalidOperationException($"{objetivo.Nombre} ya está derrotado.");
+    }
+
     protected virtual int ObtenerBonusDeAtaque() => 0;
 
     protected virtual int ObtenerBonusDeDefensaObjetivo(Personaje objetivo)

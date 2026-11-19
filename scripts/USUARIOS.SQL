@@ -4,14 +4,12 @@ USE juego_combate_morena;
 -- Estos usuarios solo aceptan conexiones desde el mismo servidor.
 CREATE USER IF NOT EXISTS 'administrador'@'localhost'
     IDENTIFIED BY 'CAMBIAR_ADMIN_PASSWORD_ANTES_DE_EJECUTAR_2026!';
-CREATE USER IF NOT EXISTS 'desarrollo'@'localhost'
-    IDENTIFIED BY 'CAMBIAR_DESARROLLO_PASSWORD_ANTES_DE_EJECUTAR_2026!';
+CREATE USER IF NOT EXISTS 'invitado'@'localhost'
+    IDENTIFIED BY 'CAMBIAR_INVITADO_PASSWORD_ANTES_DE_EJECUTAR_2026!';
 
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'administrador'@'localhost';
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'desarrollo'@'localhost';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'invitado'@'localhost';
 
--- El administrador accede a todas las bases, sin permiso para delegar privilegios.
-GRANT ALL PRIVILEGES ON *.* TO 'administrador'@'localhost';
+GRANT ALL PRIVILEGES ON juego_combate_morena.* TO 'administrador'@'localhost';
 
--- Desarrollo queda limitado al esquema del proyecto.
-GRANT ALL PRIVILEGES ON juego_combate_morena.* TO 'desarrollo'@'localhost';
+GRANT SELECT ON juego_combate_morena.* TO 'invitado'@'localhost';

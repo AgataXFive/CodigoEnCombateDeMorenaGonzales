@@ -12,24 +12,15 @@ CREATE PROCEDURE sp_registrar_batalla(
 BEGIN
     DECLARE v_vida_1 INT DEFAULT NULL;
     DECLARE v_vida_2 INT DEFAULT NULL;
+    DECLARE v_no_encontrado BOOLEAN DEFAULT FALSE;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
         RESIGNAL;
-DROP PROCEDURE IF EXISTS sp_registrar_batalla $$
-CREATE PROCEDURE sp_registrar_batalla(
-    IN p_nombre VARCHAR(100),
-    IN p_personaje_1_id INT,
-    IN p_personaje_2_id INT,
-    OUT p_batalla_id INT
-)
-BEGIN
-    DECLARE v_vida_1 INT DEFAULT NULL;
-    DECLARE v_vida_2 INT DEFAULT NULL;
     END;
 
-    START TRANSACTION;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_no_encontrado = TRUE;
 
     IF p_nombre IS NULL OR TRIM(p_nombre) = ''
         OR p_personaje_1_id IS NULL OR p_personaje_2_id IS NULL THEN
@@ -42,22 +33,25 @@ BEGIN
             SET MESSAGE_TEXT = 'Una batalla requiere dos personajes distintos.';
     END IF;
 
+    START TRANSACTION;
+
     SELECT vida INTO v_vida_1
     FROM Personaje
     WHERE id = p_personaje_1_id
     FOR UPDATE;
 
-    IF v_vida_1 IS NULL THEN
+    IF v_no_encontrado THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'El primer personaje no existe.';
     END IF;
 
+    SET v_no_encontrado = FALSE;
     SELECT vida INTO v_vida_2
     FROM Personaje
     WHERE id = p_personaje_2_id
     FOR UPDATE;
 
-    IF v_vida_2 IS NULL THEN
+    IF v_no_encontrado THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'El segundo personaje no existe.';
     END IF;
@@ -83,6 +77,7 @@ BEGIN
     DECLARE v_personaje_1_id INT DEFAULT NULL;
     DECLARE v_personaje_2_id INT DEFAULT NULL;
     DECLARE v_ganador_actual_id INT DEFAULT NULL;
+    DECLARE v_no_encontrado BOOLEAN DEFAULT FALSE;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -90,12 +85,14 @@ BEGIN
         RESIGNAL;
     END;
 
-    START TRANSACTION;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_no_encontrado = TRUE;
 
     IF p_batalla_id IS NULL OR p_ganador_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'La batalla y el ganador son obligatorios.';
     END IF;
+
+    START TRANSACTION;
 
     SELECT personaje_1_id, personaje_2_id, ganador_id
     INTO v_personaje_1_id, v_personaje_2_id, v_ganador_actual_id
@@ -103,7 +100,7 @@ BEGIN
     WHERE id = p_batalla_id
     FOR UPDATE;
 
-    IF v_personaje_1_id IS NULL THEN
+    IF v_no_encontrado THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'La batalla indicada no existe.';
     END IF;
@@ -131,17 +128,9 @@ CREATE PROCEDURE sp_obtener_ranking_por_tipo_periodo(
     IN p_hasta DATETIME
 )
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
     IF p_desde IS NULL OR p_hasta IS NULL OR p_desde >= p_hasta THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'El período debe tener fechas válidas y p_desde menor que p_hasta.';
+            SET MESSAGE_TEXT = 'El periodo debe tener fechas validas y p_desde menor que p_hasta.';
     END IF;
 
     SELECT
@@ -172,8 +161,6 @@ BEGIN
     INNER JOIN TipoPersonaje tp ON tp.id = p.tipo_id
     GROUP BY tp.id, tp.nombre
     ORDER BY victorias DESC, porcentaje_victorias DESC, tp.nombre ASC;
-
-    COMMIT;
 END $$
 
 DROP PROCEDURE IF EXISTS sp_reporte_batallas_periodo $$
@@ -182,17 +169,9 @@ CREATE PROCEDURE sp_reporte_batallas_periodo(
     IN p_hasta DATETIME
 )
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
     IF p_desde IS NULL OR p_hasta IS NULL OR p_desde >= p_hasta THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'El período debe tener fechas válidas y p_desde menor que p_hasta.';
+            SET MESSAGE_TEXT = 'El periodo debe tener fechas validas y p_desde menor que p_hasta.';
     END IF;
 
     SELECT
@@ -217,8 +196,6 @@ BEGIN
     WHERE b.fecha_creacion >= p_desde
         AND b.fecha_creacion < p_hasta
     ORDER BY b.fecha_creacion DESC, b.id DESC;
-
-    COMMIT;
 END $$
 
 DELIMITER ;

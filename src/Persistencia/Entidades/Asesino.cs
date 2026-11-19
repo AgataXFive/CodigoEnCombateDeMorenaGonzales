@@ -18,15 +18,27 @@ public class Asesino : Personaje
         Defensa = 1;
     }
 
+    public Asesino(string nombre, int nivel, int poder, int sigilo, int vida, int ataque, int defensa)
+        : base(nombre, nivel, poder, vida, ataque, defensa)
+    {
+        if (sigilo <= 0)
+            throw new ArgumentOutOfRangeException(nameof(sigilo), "El sigilo debe ser mayor que cero.");
+        Sigilo = sigilo;
+        Habilidad = new Habilidad("Ataque furtivo");
+    }
+
     public override void Atacar(Personaje objetivo)
     {
-        ArgumentNullException.ThrowIfNull(objetivo);
-
-        if (Derrotado)
-            throw new InvalidOperationException($"{Nombre} está derrotado y no puede atacar.");
+        ValidarAccion(objetivo);
 
         int danio = Math.Max(1, Ataque + Sigilo + Poder - objetivo.Defensa);
         objetivo.RecibirDanio(danio);
+    }
+
+    public override void UsarHabilidad(Personaje objetivo)
+    {
+        ValidarAccion(objetivo);
+        objetivo.RecibirDanio(Math.Max(1, Ataque + Sigilo * 2 + Poder - objetivo.Defensa));
     }
 
     protected override int ObtenerBonusDeAtaque() => Sigilo;

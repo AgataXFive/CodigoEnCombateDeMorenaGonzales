@@ -27,11 +27,15 @@ public class Guerrero : Personaje
 
     public override void Atacar(Personaje objetivo)
     {
-        if (objetivo is null)
-            throw new ArgumentNullException(nameof(objetivo));
-
+        ValidarAccion(objetivo);
         int danio = Math.Max(1, Ataque + Fuerza - objetivo.Defensa);
         objetivo.RecibirDanio(danio);
+    }
+
+    public override void UsarHabilidad(Personaje objetivo)
+    {
+        ValidarAccion(objetivo);
+        objetivo.RecibirDanio(Math.Max(1, Ataque + Fuerza * 2 - objetivo.Defensa));
     }
 
     public override void Defenderse()

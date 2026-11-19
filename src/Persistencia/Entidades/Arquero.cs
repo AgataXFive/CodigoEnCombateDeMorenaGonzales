@@ -16,16 +16,27 @@ public class Arquero : Personaje
         Defensa = 1;
 	}
 
+	public Arquero(string nombre, int nivel, int poder, int punteria, int vida, int ataque, int defensa)
+		: base(nombre, nivel, poder, vida, ataque, defensa)
+	{
+		if (punteria <= 0)
+			throw new ArgumentOutOfRangeException(nameof(punteria), "La punteria debe ser mayor que cero.");
+		Punteria = punteria;
+	}
+
     public override void Atacar(Personaje objetivo)
     {
-        ArgumentNullException.ThrowIfNull(objetivo);
-
-        if (Derrotado)
-            throw new InvalidOperationException($"{Nombre} está derrotado y no puede atacar.");
+		ValidarAccion(objetivo);
 
         int danio = Math.Max(1, Ataque + Punteria - objetivo.Defensa);
         objetivo.RecibirDanio(danio);
     }
+
+	public override void UsarHabilidad(Personaje objetivo)
+	{
+		ValidarAccion(objetivo);
+		objetivo.RecibirDanio(Math.Max(1, Ataque + Punteria * 2 - objetivo.Defensa));
+	}
 
     protected override int ObtenerBonusDeAtaque() => Punteria;
     protected override int ObtenerBonusDeDefensa() => 1;
