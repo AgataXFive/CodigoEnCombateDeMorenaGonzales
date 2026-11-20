@@ -65,3 +65,81 @@ Swagger ya está instalado mediante `Swashbuckle.AspNetCore` y se publica en `/s
 | DELETE | `/api/combates/{id}/turnos/{turnoId}` | Eliminar último turno y restaurar estado |
 
 Los turnos y la actualización del combate se guardan en una transacción. El borrado del último turno también elimina el registro y restaura el snapshot del combate dentro de una transacción.
+
+## Diagrama entidad-relación
+
+Este diagrama representa el esquema legado `juego_combate_morena` después de ejecutar `scripts/04_api_turnos.sql`.
+
+```mermaid
+erDiagram
+    TipoPersonaje ||--o{ Personaje : clasifica
+    Personaje ||--o{ PersonajeHabilidad : posee
+    Habilidad ||--o{ PersonajeHabilidad : asignada_a
+    Personaje ||--o{ Batalla : participa_1
+    Personaje ||--o{ Batalla : participa_2
+    Personaje o|--o{ Batalla : puede_ganar
+    Batalla ||--o{ Turno : registra
+    Personaje ||--o{ Turno : ejecuta
+    Personaje o|--o{ Turno : ganador_anterior
+
+    TipoPersonaje {
+        INT id PK
+        VARCHAR30 nombre UK
+    }
+
+    Personaje {
+        INT id PK
+        VARCHAR50 nombre UK
+        INT nivel
+        INT poder
+        INT vida
+        INT ataque
+        INT defensa
+        INT mana
+        INT fuerza
+        INT punteria
+        INT sigilo
+        INT tipo_id FK
+    }
+
+    Habilidad {
+        INT id PK
+        VARCHAR80 nombre UK
+        VARCHAR255 descripcion
+    }
+
+    PersonajeHabilidad {
+        INT personaje_id PK, FK
+        INT habilidad_id PK, FK
+    }
+
+    Batalla {
+        INT id PK
+        VARCHAR100 nombre
+        INT personaje_1_id FK
+        INT personaje_2_id FK
+        INT ganador_id FK "nullable"
+        TIMESTAMP fecha_creacion
+        INT vida1
+        INT vida2
+        VARCHAR20 estado
+    }
+
+    Turno {
+        INT id PK
+        INT batalla_id FK
+        INT numero
+        INT atacante_id FK
+        VARCHAR20 accion
+        INT dano
+        INT vida1_antes
+        INT vida2_antes
+        VARCHAR20 estado_antes
+        INT ganador_antes FK "nullable"
+        VARCHAR500 nota "nullable"
+    }
+```
+
+## Documentación
+
+- [Guía de instalación y uso](docs/guia-de-uso.md)
