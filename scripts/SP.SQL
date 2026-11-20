@@ -1,4 +1,4 @@
-USE juego_combate_morena;
+USE 5to_combate_morena;
 
 DELIMITER $$
 

@@ -28,7 +28,7 @@ mysql --version
 
 ## 3. Preparar la base de datos
 
-La API esta preparada para trabajar con el esquema legado `juego_combate_morena`.
+La API esta preparada para trabajar con el esquema legado `5to_combate_morena`.
 
 Desde la raiz del repositorio, cree y cargue la base:
 
@@ -39,7 +39,7 @@ mysql -u root -p < scripts/04_api_turnos.sql
 mysql -u root -p < scripts/SP.SQL
 ```
 
-Advertencia: `scripts/script1.sql` elimina `juego_combate_morena` si ya existe. Realice una copia de seguridad antes de ejecutarlo.
+Advertencia: `scripts/script1.sql` elimina `5to_combate_morena` si ya existe. Realice una copia de seguridad antes de ejecutarlo.
 
 Para ejecutar todos los scripts desde un instalador:
 
@@ -72,16 +72,16 @@ Para el esquema legado, el instalador principal usa las cuentas configuradas en 
 En PowerShell:
 
 ```powershell
-$env:COMBATE_API_READ_CONNECTION = "Server=localhost;Database=juego_combate_morena;User ID=invitado;Password=CLAVE_LECTURA"
-$env:COMBATE_API_ADMIN_CONNECTION = "Server=localhost;Database=juego_combate_morena;User ID=administrador;Password=CLAVE_ADMIN"
+$env:COMBATE_API_READ_CONNECTION = "Server=localhost;Database=5to_combate_morena;User ID=invitado;Password=CLAVE_LECTURA"
+$env:COMBATE_API_ADMIN_CONNECTION = "Server=localhost;Database=5to_combate_morena;User ID=administrador;Password=CLAVE_ADMIN"
 $env:COMBATE_API_CORS_ORIGINS = "http://localhost:5173,http://localhost:3000"
 ```
 
 En Bash:
 
 ```sh
-export COMBATE_API_READ_CONNECTION='Server=localhost;Database=juego_combate_morena;User ID=invitado;Password=CLAVE_LECTURA'
-export COMBATE_API_ADMIN_CONNECTION='Server=localhost;Database=juego_combate_morena;User ID=administrador;Password=CLAVE_ADMIN'
+export COMBATE_API_READ_CONNECTION='Server=localhost;Database=5to_combate_morena;User ID=invitado;Password=CLAVE_LECTURA'
+export COMBATE_API_ADMIN_CONNECTION='Server=localhost;Database=5to_combate_morena;User ID=administrador;Password=CLAVE_ADMIN'
 export COMBATE_API_CORS_ORIGINS='http://localhost:5173,http://localhost:3000'
 ```
 
@@ -237,7 +237,7 @@ Abra la URL que imprime `dotnet run`, agregando `/swagger`. Swagger no depende d
 
 ### Error al crear o modificar datos
 
-Ejecute `scripts/04_api_turnos.sql` si trabajan sobre `juego_combate_morena` y verifique que la cuenta administradora tenga permisos `ALTER`, `UPDATE`, `CREATE` y `INSERT`.
+Ejecute `scripts/04_api_turnos.sql` si trabajan sobre `5to_combate_morena` y verifique que la cuenta administradora tenga permisos `ALTER`, `UPDATE`, `CREATE` y `INSERT`.
 
 ### Error CORS desde el frontend
 

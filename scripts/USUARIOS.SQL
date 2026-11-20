@@ -1,4 +1,4 @@
-USE juego_combate_morena;
+USE 5to_combate_morena;
 
 -- Reemplazar ambas contrasenas por claves seguras antes de ejecutar.
 -- Estos usuarios solo aceptan conexiones desde el mismo servidor.
@@ -10,6 +10,6 @@ CREATE USER IF NOT EXISTS 'invitado'@'localhost'
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'administrador'@'localhost';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'invitado'@'localhost';
 
-GRANT ALL PRIVILEGES ON juego_combate_morena.* TO 'administrador'@'localhost';
+GRANT ALL PRIVILEGES ON 5to_combate_morena.* TO 'administrador'@'localhost';
 
-GRANT SELECT ON juego_combate_morena.* TO 'invitado'@'localhost';
+GRANT SELECT ON 5to_combate_morena.* TO 'invitado'@'localhost';

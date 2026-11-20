@@ -1,6 +1,6 @@
 -- Ejecutar desde la raiz del repositorio:
 -- mysql -u root -p < scripts/install.sql
--- ATENCION: script1.sql elimina y vuelve a crear juego_combate_morena.
+-- ATENCION: script1.sql elimina y vuelve a crear 5to_combate_morena.
 -- Respaldar la base antes de ejecutar este instalador.
 SOURCE scripts/script1.sql
 SOURCE scripts/script2.sql

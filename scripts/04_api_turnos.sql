@@ -1,4 +1,4 @@
-USE juego_combate_morena;
+USE 5to_combate_morena;
 
 -- Migracion aditiva para habilitar la API sin borrar personajes ni batallas.
 SET @migration_sql = IF(

@@ -4,7 +4,7 @@ API Minimal .NET 10 para administrar personajes, combates y turnos. Las lecturas
 
 ## Base de datos
 
-La API actual se conecta al esquema legado `juego_combate_morena`, que usa las tablas `Personaje`, `TipoPersonaje` y `Batalla`. Antes de iniciar la API sobre una base existente, ejecutar la migración aditiva `scripts/04_api_turnos.sql` con una cuenta que pueda alterar y actualizar tablas y crear tablas. La migración no elimina personajes ni combates; agrega el estado y las vidas del combate y crea `Turno`. Si se usa el instalador completo, `scripts/install.sql` ya carga la migración, pero `scripts/script1.sql` elimina y recrea la base: respaldarla primero.
+La API actual se conecta al esquema legado `5to_combate_morena`, que usa las tablas `Personaje`, `TipoPersonaje` y `Batalla`. Antes de iniciar la API sobre una base existente, ejecutar la migración aditiva `scripts/04_api_turnos.sql` con una cuenta que pueda alterar y actualizar tablas y crear tablas. La migración no elimina personajes ni combates; agrega el estado y las vidas del combate y crea `Turno`. Si se usa el instalador completo, `scripts/install.sql` ya carga la migración, pero `scripts/script1.sql` elimina y recrea la base: respaldarla primero.
 
 Para preparar la base desde cero, ejecutar desde la raíz en este orden:
 
@@ -17,7 +17,7 @@ mysql -u root -p < sql/03_datos_muestra.sql
 Para la base legado que ya está cargada en este repositorio, la migración se ejecuta así. Detecta las columnas que ya se hayan agregado en un intento anterior; ejecutarla con una cuenta que también tenga permisos `UPDATE` y `CREATE`:
 
 ```sh
-mysql -u administrador -p juego_combate_morena < scripts/04_api_turnos.sql
+mysql -u administrador -p 5to_combate_morena < scripts/04_api_turnos.sql
 ```
 
 Antes de ejecutar `02_usuarios.sql`, cambiar ambos valores de ejemplo por contraseñas propias. No guardar contraseñas reales en el repositorio. El usuario invitado tiene `SELECT` sobre toda la base; el administrador tiene permisos completos. Para la base legado, `scripts/USUARIOS.SQL` crea `invitado` y `administrador`.
@@ -25,8 +25,8 @@ Antes de ejecutar `02_usuarios.sql`, cambiar ambos valores de ejemplo por contra
 Configurar las cadenas de conexión como variables de entorno (ejemplo para Bash):
 
 ```sh
-export COMBATE_API_READ_CONNECTION='Server=localhost;Database=juego_combate_morena;User ID=invitado;Password=...'
-export COMBATE_API_ADMIN_CONNECTION='Server=localhost;Database=juego_combate_morena;User ID=administrador;Password=...'
+export COMBATE_API_READ_CONNECTION='Server=localhost;Database=5to_combate_morena;User ID=invitado;Password=...'
+export COMBATE_API_ADMIN_CONNECTION='Server=localhost;Database=5to_combate_morena;User ID=administrador;Password=...'
 export COMBATE_API_CORS_ORIGINS='http://localhost:5173,http://localhost:3000'
 ```
 
@@ -68,7 +68,7 @@ Los turnos y la actualización del combate se guardan en una transacción. El bo
 
 ## Diagrama entidad-relación
 
-Este diagrama representa el esquema legado `juego_combate_morena` después de ejecutar `scripts/04_api_turnos.sql`.
+Este diagrama representa el esquema legado `5to_combate_morena` después de ejecutar `scripts/04_api_turnos.sql`.
 
 ```mermaid
 erDiagram
